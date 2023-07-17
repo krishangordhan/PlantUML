@@ -1,0 +1,44 @@
+@startuml Diagnostic
+
+left to right direction
+hide empty members
+
+entity "IntegrationDiagnostic" as ID {
+    * id <<generated>>
+    --
+    * integrationClass
+}
+
+entity "DiagnosticIntegrationDiagnostic" as DID {
+    * id <<generated>>
+    --
+    * integrationDiagnostic <<FK>>
+    * diagnostic <<FK>>
+}
+
+entity "Diagnostic" as D {
+    * id <<generated>>
+    --
+    * integrationClass
+}
+
+entity "Integration" as I {
+    * id <<generated>>
+    --
+    * integrationClass
+}
+
+entity "IntegrationSetting" as IS {
+    * id <<generated>>
+    --
+    * integrationClass
+    * osr_ownership
+}
+
+ID::id ||--|| DID::integrationDiagnostic
+D::id ||--|| DID::diagnostic
+I::integrationClass ||..|{ID::integrationClass
+IS::integrationClass }|..||I::integrationClass
+
+
+@enduml
