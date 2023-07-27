@@ -3,9 +3,29 @@
 left to right direction
 hide empty members
 
+title "Integrated Diagnostic ER Diagram"
+
+legend 
+    This diagram is used to describe the common expected pathway for
+    integrated diagnostics in ezyVet.
+    
+    This ER Diagram does not include common ezyVET database columns, such as;
+    * create time,
+    * create user,
+    * modified time,
+    * modified user,
+    * active
+    As well as any old columns that are not part of the workflow.
+end legend
+
 entity "IntegrationDiagnostic" as ID {
     * id <<generated>>
     --
+    * code
+    * name
+    * supplierPrice
+    supplierContractPrice
+    * description
     * integrationClass
 }
 
@@ -19,26 +39,136 @@ entity "DiagnosticIntegrationDiagnostic" as DID {
 entity "Diagnostic" as D {
     * id <<generated>>
     --
+    code
+    name
+    description
+    supplierContact
+    * type
     * integrationClass
 }
 
 entity "Integration" as I {
     * id <<generated>>
     --
-    * integrationClass
+    recordType
+    name
+    integrationClass
 }
 
 entity "IntegrationSetting" as IS {
     * id <<generated>>
     --
-    * integrationClass
+    config
+    fieldName
+    fieldValue
+    description
+    integrationDb
+    * suppliercontact
+    integrationClass
+    integrationType
     * osr_ownership
 }
 
-ID::id ||--|| DID::integrationDiagnostic
-D::id ||--|| DID::diagnostic
+entity "DefaultBillingTrigger" as DBT {
+    * id <<generated>>
+    --
+     forClass
+     forId
+     product
+     qty
+     recurrance
+}
+
+entity "Product" as P {
+    * id <<generated>>
+    --
+    * name
+    * description
+    * code
+    diagnostic
+}
+
+entity "ProductPricing" as PP {
+    * id <<generated>>
+    --
+    * product
+    * costPrice
+    salesTaxRate
+    * markupPercentage
+    * sellPricess
+    osr_ownership
+}
+
+entity "DiagnosticRequest" as DR {
+     * id <<generated>>
+    --
+    externalReference
+    contact
+    animal
+    consult
+    supplierContact
+    vet
+    reqReferenceNum
+    status
+    osr_ownership
+}
+
+entity "DiagnosticRequestItem" as DRI {
+    * id <<generated>>
+    --
+    diagnosticRequest
+    diagnostic
+    product
+}
+
+entity "DiagnosticResult" as DRS {
+    * id <<generated>>
+    --
+    contact
+    animal
+    consult
+    vet
+    diagnosticRequest
+    reqReferenceNum
+    outcome
+    clinicNotes
+    labStatus
+    owr_ownership
+    externalId
+    externalModifiedDate
+}
+
+entity "DiagnosticResultItem" as DRSI {
+    * id <<generated>>
+    --
+    externalReference
+    diagnosticResult
+    name
+    value
+    rangeLow
+    rangeHigh
+    unit
+    qualifier
+    notes
+    labStatus
+    runSummaryId
+}
+
+
+ID::id ||--|{ DID::integrationDiagnostic
+DID::diagnostic }|--|| D::id
 I::integrationClass ||..|{ID::integrationClass
 IS::integrationClass }|..||I::integrationClass
+'ID::integrationClass }|..||IS::integrationClass
+D::id ||..|{ DBT::forId
+DBT::product||--||P::id
+P::id||--|{PP::product
+P::diagnostic |o..||D::id
+DR::id||--|{DRI::diagnosticRequest
+DRI::product||--||P::id
+DRI::diagnostic||--||D::id
+DR::id||--||DRS::diagnosticRequest
+DRS::id||--||DRSI::diagnosticResult
 
 
 @enduml
