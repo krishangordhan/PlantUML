@@ -1,4 +1,4 @@
-@startuml Diagnostic
+@startuml EntityRelationshipDiagram
 
 left to right direction
 hide empty members

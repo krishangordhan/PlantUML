@@ -1,0 +1,47 @@
+@startuml Update Diagnostic - SequenceDiagram
+
+legend 
+    This process is made with VC+ in mind, but most of the 
+    integration work in a similar way and share code.
+
+    Not all integrations update breeds and species, as well as only
+    VC+ confirms the orderable test codes.
+end legend
+
+queue NightlyCron as cron
+participant ezyVet 
+database Database as db 
+participant ExternalIntegration as integration #99FF99
+hide footbox
+
+cron -> ezyVet ++ : Start Process for Integration
+ezyVet -> integration ++ : Request Breeds List
+integration -> ezyVet -- : Return Breeds List
+ezyVet -> db : Upsert breeds
+|||
+ezyVet -> integration ++ : Request Species List
+integration -> ezyVet -- : Sends Species List
+ezyVet -> db : Upsert species
+|||
+ezyVet -> integration ++ : Request Diagnostic List
+integration -> ezyVet -- : Returns Diagnostic List
+ezyVet -> db : Upsert Integration Diagnostics
+|||
+ezyVet -> db : Get all diagnostics not in Diagnostic List
+db -> ezyVet : Returns diagnostics not in Diagnostic List
+ezyVet -> db : Disable returned diagnostics
+|||
+db -> ezyVet : Get all integration diagnostics
+ezyVet -> ezyVet : Convert integration diagnostics \n to diagnostics
+ezyVet -> db : Upsert Diagnostics
+|||
+db -> ezyVet : Get all diagnostics include linked product
+ezyVet -> db : Upsert Product Pricing if two way link
+db -> ezyVet : Get product for diagnostic from similar code
+ezyVet -> db : Upsert Product and Product Pricing
+|||
+ezyVet -> integration ++ : Send orderable diagnostics to validate
+integration -> ezyVet -- : Return any errors from validating diagnostics
+ezyVet -> cron -- : Send process complete
+
+@enduml
