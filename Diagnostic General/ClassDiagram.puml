@@ -1,0 +1,67 @@
+@startuml Diagnostics - Class Diagram
+
+package Framework <<Frame>> {
+    class FrameworkDataItem
+}
+class Integration {
+}
+class DiagnosticIntegration {
+}
+package StandardDiagnostic <<Frame>>{
+    class StandardDiagnostic {  
+    }
+}
+package StandardPacs <<Frame>> {
+    class StandardPacs {
+    }
+}
+class IdexxReferenceShared {
+    
+    +void getDiagnosticResults()
+
+}
+class IdexxVetConnectPlus {
+}
+class IdexxVetConnectPlusInternal {
+}
+class IdexxReferenceUS {
+}
+interface HasLegacyIntegrationInterface {
+}
+package PacsIntegration <<Frame>> {
+    class PacsIntegration {
+    }
+}
+class AbaxisVetscanFuse {
+}
+class Antech {
+}
+class LabTransmit{
+}
+class EmailedLabs{
+}
+class IdexxIvls{
+}
+
+FrameworkDataItem <|-- Integration
+
+Integration <|-- DiagnosticIntegration
+Integration <|-- StandardPacs
+
+DiagnosticIntegration <|-- IdexxReferenceShared
+DiagnosticIntegration <|-- IdexxIvls
+DiagnosticIntegration <|-- StandardDiagnostic
+DiagnosticIntegration <|-- PacsIntegration
+DiagnosticIntegration <|-- AbaxisVetscanFuse
+DiagnosticIntegration <|-- Antech
+DiagnosticIntegration <|-- LabTransmit
+DiagnosticIntegration <|-- EmailedLabs
+
+IdexxReferenceShared <|-- IdexxVetConnectPlus
+IdexxReferenceShared <|-- IdexxVetConnectPlusInternal
+IdexxReferenceShared <|-- IdexxReferenceUS
+
+' HasLegacyIntegrationInterface <|.. IdexxVetConnectPlus
+' HasLegacyIntegrationInterface <|.. IdexxVetConnectPlusInternal
+
+@enduml

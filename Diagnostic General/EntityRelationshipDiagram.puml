@@ -154,6 +154,35 @@ entity "DiagnosticResultItem" as DRSI {
     runSummaryId
 }
 
+entity "IntegrationSpecies" as ISP {
+    * id <<generated>>
+    --
+    integrationClass
+    code
+    name
+}
+
+entity "IntegrationSpeciesMap" as ISM {
+    * id <<generated>>
+    --
+    integrationSpecies
+    species
+}
+
+entity "IntegrationBreed" as IB {
+    * id <<generated>>
+    --
+    integrationClass
+    code
+    name
+}
+
+entity "IntegrationBreedMap" as IBM {
+    * id <<generated>>
+    --
+    integrationBreed
+    breed
+}
 
 ID::id ||--|{ DID::integrationDiagnostic
 DID::diagnostic }|--|| D::id
@@ -169,6 +198,10 @@ DRI::product||--||P::id
 DRI::diagnostic||--||D::id
 DR::id||--||DRS::diagnosticRequest
 DRS::id||--||DRSI::diagnosticResult
+IS::integrationClass }|..|| ISP::integrationClass
+ISP::id ||--|| ISM::integrationSpecies
+IS::integrationClass }|..|| IB::integrationClass
+IB::id ||--|| IBM::integrationBreed
 
 
 @enduml
