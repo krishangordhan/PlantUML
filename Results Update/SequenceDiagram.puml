@@ -1,0 +1,48 @@
+@startuml Update Results (VC+) - SequenceDiagram
+
+legend 
+    This is the process for VC+ Results to be received and updated.
+    This is only for IVLS and Reference Labs. Digital imaging results use a different method.
+    
+    This is a very detailed version of this and does not need to be as detailed.
+    A lot of the calls are not needed to recall.
+    But I like to capture the whole image so we know.
+end legend
+
+
+participant VetConnectPlus as integration #99FF99
+queue LambdaGateway as gateway
+queue LambdaQueue as queue
+database DynamoDB as dynamo
+participant EzyVetAPI as api
+database Database as db 
+database S3Storage as S3
+
+
+integration -> gateway ++ : Sends notification about result update
+gateway -> dynamo : Gets credential information
+dynamo -> gateway : Checks credentials match
+gateway -> dynamo : Get site info from external IDs passed with notification
+dynamo -> gateway : Returns all site infos that match
+gateway -> queue --++ : Breaks notification down to send to each site
+queue -> dynamo  : Get integration record
+dynamo -> queue : Returns integration record
+queue -> api --++ : Sends notification to site along with JWT
+|||
+api -> db : Check if result is processed
+db -> api : Returns if has been processed
+api -> db : Get integration settings
+db -> api : Return integration settings
+api -> integration : Make request to get results with credentials
+integration -> api : Return results if credentials correct
+api -> db : Get Diagnostic Request by External Reference
+db -> api : Return Diagnostic Request if it exists
+api -> db : Get existing results by External Reference
+api -> db : Disable old result items
+api -> db : Upsert results
+api -> db : Save new result items
+api -> S3 : Upload results pdf to S3
+api -> db : Save attachment and file in db pointed at S3 bucket
+
+
+@enduml

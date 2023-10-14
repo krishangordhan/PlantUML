@@ -1,5 +1,8 @@
 @startuml Diagnostics - Class Diagram
 
+title "Diagnostics - Class Diagram"
+
+
 package Framework <<Frame>> {
     class FrameworkDataItem
 }
