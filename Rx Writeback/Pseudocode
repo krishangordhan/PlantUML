@@ -1,0 +1,79 @@
+v1/externalprescription
+
+
+{
+  "externalPrescription": {
+    "totalPrice": 100.00, //! required float
+    "dateOfPrescription": 1633027200, //! required int GMT
+    "dateOfDispense": 1633027200, //? Optional int GMT (if not provided copy prescription to dispense date)
+    "prescribing_vet_user": 1, //! required int
+    "country": "USA", //! required string
+    "state": "CA", //! required string 2 character code
+    "externalReference": "Ref123", //! required string
+    "animalId": 1, //! required int animal ID
+    "consultId": 1, //! required int consult ID
+    "items": [
+      {
+        "externalProductName": "Product 1", //! required string
+        "externalProductReference": "RefProd1", //! required string
+        "link": "http://example.com", //? Optional string
+        "instructions": "Use as directed", //? Optional text
+        "price": 50.00, //! required float
+        "qty": 2, //! required float
+        "serial_number": "123456", //? Optional string
+      },
+      // ... more items
+    ]
+  }
+}
+
+/** 
+
+POST Endpoint
+
+POST request received
+Validate request
+
+Copy prescription validation.
+(Check if animal exists, consult exists, vet exists)
+
+//* Making Product 
+Check if product group exists for API partner.
+  Create if needed
+Check if product exists for API partner.
+  Create product if needed.
+
+Create prescription
+Create medication (prescription items)
+Create external prescription.
+create external prescription items with a link medication.
+
+Return the UID of external prescription on successful creation.
+
+
+PUT endpoint
+
+PUT request received
+Validate request
+Validate structure
+
+Check if UUID exists and replace result and result items with below.
+  If not error 404.
+
+//* Making Product 
+Check if product group exists for API partner.
+  Create if needed
+Check if product exists for API partner.
+  Create product if needed.
+
+Copy prescription validation.
+(Check if animal exists, consult exists, vet exists)
+
+Create prescription
+Create medication (prescription items)
+
+If UID exists, disable all external prescription and items and create new ones.
+  Create external prescription.
+  create external prescription items with a link medication.
+
+Return the UID of external prescription on successful creation.

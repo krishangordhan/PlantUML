@@ -1,6 +1,6 @@
-@startuml Diagnostics - Class Diagram
+@startuml Diagnostic Integrations - Class Diagram
 
-title "Diagnostics - Class Diagram"
+title "Integrations - Class Diagram"
 
 
 package Framework <<Frame>> {
@@ -19,9 +19,6 @@ package StandardPacs <<Frame>> {
     }
 }
 class IdexxReferenceShared {
-    
-    +void getDiagnosticResults()
-
 }
 class IdexxVetConnectPlus {
 }
@@ -45,6 +42,12 @@ class EmailedLabs{
 }
 class IdexxIvls{
 }
+class Asteris{
+}
+class VetRocket{
+}
+class Cuattro{
+}
 
 FrameworkDataItem <|-- Integration
 
@@ -64,7 +67,23 @@ IdexxReferenceShared <|-- IdexxVetConnectPlus
 IdexxReferenceShared <|-- IdexxVetConnectPlusInternal
 IdexxReferenceShared <|-- IdexxReferenceUS
 
-' HasLegacyIntegrationInterface <|.. IdexxVetConnectPlus
-' HasLegacyIntegrationInterface <|.. IdexxVetConnectPlusInternal
+'HasLegacyIntegrationInterface <|.. IdexxVetConnectPlus
+'HasLegacyIntegrationInterface <|.. IdexxVetConnectPlusInternal
+
+
+note left of IdexxReferenceShared
+    File is <b>3400</b> lines, with <b>109</b> functions.
+    No defined responsibilities other than "common methods".
+    No idea what functions are still being used.
+    Functions in there called Temp, but still sitting there for years.
+    Unsafe calls to functions that are not on all children.
+endnote
+
+note bottom of IdexxReferenceUS
+    File 2500 lines, with 94 functions.
+    A lot of the functions are to do with the Migration.
+    How many of these functions are still in use
+endnote
+
 
 @enduml

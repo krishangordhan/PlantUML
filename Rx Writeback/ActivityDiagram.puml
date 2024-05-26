@@ -1,0 +1,43 @@
+@startuml ExternalPrescriptionActivityDiagramPost
+start
+partition ExternalPrescriptionController {
+    :Prescription Post received;
+}
+partition ExternalPrescriptionValidator {
+    if (validate parameters exist) then (invalid)
+        #pink:error return missing parameters;
+        kill;
+    else (valid)
+    endif
+    if (validate prescription parameters) then (invalid)
+        note left
+            This is to check the usual content for a prescription.
+            Such as if the animal, consult, vet is all valid.
+        end note
+        #pink:error return invalid parameters;
+        kill;
+    else (valid)
+endif
+}
+partition ProductHandler {
+    if (Product Group exists for API) then (notexists)
+        :Create Product Group;
+    else (exists)
+        :Get Product Group;
+    endif
+
+    if (Product exists by reference) then (notexists)
+        :Create Product;
+    else (exists)
+        :Get Product;
+    endif
+}
+partition ExternalPrescriptionHandler {
+    :Create Prescription;
+    :Create Medication;
+    :Create External Prescription;
+    :Create External Prescription Item;
+}
+:Return Prescription UUID;
+stop
+@enduml

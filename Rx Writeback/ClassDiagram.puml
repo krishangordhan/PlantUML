@@ -1,0 +1,51 @@
+@startuml ExternalPrescriptionClassDiagram
+
+entity ExternalPrescription
+entity ExternalPrescriptionItem
+
+class ExternalPrescriptionController {
+    _digestPostParams()
+    _validatePostParams()
+    _digestPatchParams()
+    _validatePatchParams()
+}
+class Controller {
+    post()
+    patch()
+}
+
+class ExternalPrescriptionValidator
+
+/' Product Creation '/
+class ProductSaver
+class ProductHandler
+class ProductGroupRepository
+class ProductRepository
+
+/' External Prescription '/
+class ExternalPrescriptionHandler
+class PrescriptionHandler
+entity Prescription
+class ExternalPrescriptionSaver
+class ExternalPrescriptionRepository
+class ExternalPrescriptionItemRepository
+
+Controller <|-- ExternalPrescriptionController
+
+ExternalPrescriptionController *-- ExternalPrescriptionValidator
+ExternalPrescriptionController *-- ProductHandler
+ProductHandler *-- ProductSaver
+ProductHandler *-- ProductGroupRepository
+ProductSaver *-- ProductRepository
+
+ExternalPrescriptionController *-- ExternalPrescriptionHandler
+ExternalPrescriptionHandler *-- PrescriptionHandler
+ExternalPrescriptionHandler *-- ExternalPrescription
+ExternalPrescription *-- ExternalPrescriptionItem
+PrescriptionHandler *-- Prescription
+ExternalPrescriptionHandler *-- ExternalPrescriptionSaver
+ExternalPrescriptionSaver *-- ExternalPrescriptionRepository
+ExternalPrescriptionSaver *-- ExternalPrescriptionItemRepository
+
+
+@enduml

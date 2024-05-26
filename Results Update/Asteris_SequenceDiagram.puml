@@ -1,0 +1,14 @@
+@startuml Update Results (Asteris) - SequenceDiagram
+
+queue Cron as cron
+participant Asteris as integration #99FF99
+participant EzyVet as ezyvet
+database Database as db 
+database S3Storage as S3
+
+cron -> ezyvet : Start Process
+ezyvet -> db : Get all Pacs Integrations
+db -> ezyvet : Returns Pacs Integrations
+
+
+@enduml

@@ -1,0 +1,38 @@
+@startuml Diagnostic Integrations - Class Diagram
+
+title "Diagnostics - Class Diagram"
+
+
+package Framework <<Frame>> {
+    class FrameworkDataItem
+}
+class Model{
+}
+
+class "IntegrationSetting" as ISModel {
+}
+class "IntegrationSetting" as ISFramework{
+}
+interface DynamoSyncableInterface{
+}
+class DiagnosticUpdater{
+}
+class DiagnosticRepository{
+}
+class Diagnostic{
+}
+class DiagnosticRequest{
+}
+class DiagnosticRequestItem{
+}
+class "DiagnosticResult" as DRModel {
+}
+class "DiagnosticResult" as DRFramework
+
+
+FrameworkDataItem <|-- ISFramework
+FrameworkDataItem <|-- Diagnostic
+Model <|-- ISModel
+DynamoSyncableInterface <|-- ISFramework
+
+@enduml
